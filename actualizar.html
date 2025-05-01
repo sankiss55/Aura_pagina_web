@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reportes de Alumnos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #A0F2CC, #B6F2D6, #26BF69);
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      gap: 30px;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .sidebar select, .sidebar label {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .content {
+      flex: 1;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .report-list button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      background: #26BF69;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .report-list button:hover {
+      background: #025908;
+    }
+
+    .field {
+      margin: 15px 0;
+    }
+
+    input[type="text"], input[type="date"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .save-btn {
+      background: #26BF69;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .save-btn:hover {
+      background: #025908;
+    }
+
+    .estado {
+      font-size: 24px;
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    small {
+      font-size: 12px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <label for="alumno">Seleccionar Alumno:</label>
+      <select id="alumno">
+        <option value="Juan Pérez">Juan Pérez</option>
+        <option value="María López">María López</option>
+        <option value="Carlos García">Carlos García</option>
+      </select>
+
+      <label for="reporte">Seleccionar Reporte:</label>
+      <select id="reporte">
+        <option value="Reporte 1">Reporte 1</option>
+        <option value="Reporte 2">Reporte 2</option>
+        <option value="Reporte 3">Reporte 3</option>
+      </select>
+
+      <div class="report-list" style="margin-top: 20px;">
+        <button onclick="cargarReporte()">Editar Reporte</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="reportDetails" style="display: none;">
+        <div class="field">
+          <label for="nombreArchivo">Nombre del archivo:</label>
+          <input type="text" id="nombreArchivo" />
+        </div>
+
+        <div class="field">
+          <label for="fechaEntrega">Fecha de entrega:</label>
+          <input type="date" id="fechaEntrega" />
+        </div>
+
+        <div class="field">
+          <label for="firmado">¿Firmado?</label>
+          <input type="checkbox" id="firmado" onchange="actualizarIcono()" />
+          <span class="estado" id="iconoFirmado">❌</span>
+        </div>
+
+        <div class="field">
+          <label for="evidencia">Subir evidencia:</label>
+          <input type="file" id="evidencia" accept=".pdf,.doc,.jpg,.png" />
+          <small id="archivoSubido"></small>
+        </div>
+
+        <div class="field">
+          <label>Fecha de actualización:</label>
+          <div id="fechaActualizacion"></div>
+          <div id="horaActualizacion" style="font-size: 12px; color: #777;"></div>
+        </div>
+
+        <button class="save-btn" onclick="guardar()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const nombreArchivo = document.getElementById('nombreArchivo');
+    const fechaEntrega = document.getElementById('fechaEntrega');
+    const firmado = document.getElementById('firmado');
+    const iconoFirmado = document.getElementById('iconoFirmado');
+    const evidenciaInput = document.getElementById('evidencia');
+    const archivoSubido = document.getElementById('archivoSubido');
+    const fechaActualizacion = document.getElementById('fechaActualizacion');
+    const horaActualizacion = document.getElementById('horaActualizacion');
+    let evidenciaNombre = '';
+
+    evidenciaInput.addEventListener('change', () => {
+      if (evidenciaInput.files.length > 0) {
+        evidenciaNombre = evidenciaInput.files[0].name;
+        archivoSubido.textContent = `Archivo cargado: ${evidenciaNombre}`;
+      } else {
+        evidenciaNombre = '';
+        archivoSubido.textContent = '';
+      }
+    });
+
+    function actualizarIcono() {
+      iconoFirmado.textContent = firmado.checked ? '✅' : '❌';
+    }
+
+    function cargarReporte() {
+      const alumno = document.getElementById('alumno').value;
+      const reporte = document.getElementById('reporte').value;
+      const data = JSON.parse(localStorage.getItem('reportes')) || {};
+
+      const info = data[alumno]?.[reporte] || {};
+
+      nombreArchivo.value = info.nombre || '';
+      fechaEntrega.value = info.fechaEntrega || '';
+      firmado.checked = info.firmado || false;
+      actualizarIcono();
+      evidenciaNombre = info.evidencia || '';
+      archivoSubido.textContent = evidenciaNombre ? `Archivo cargado: ${evidenciaNombre}` : '';
+      fechaActualizacion.textContent = info.fechaActualizacion || 'Sin actualizar';
+      horaActualizacion.textContent = info.horaActualizacion || '';
+
+      document.getElementById('reportDetails').style.display = 'block';
+    }
+
+    function guardar() {
+      const alumno = document.getElementById('alumno').value;
+      const reporte = document.getElementById('reporte').value;
+      const nombre = nombreArchivo.value;
+      const fecha = fechaEntrega.value;
+      const firmadoEstado = firmado.checked;
+      const hoy = new Date();
+
+      const data = JSON.parse(localStorage.getItem('reportes')) || {};
+      if (!data[alumno]) data[alumno] = {};
+      if (!data[alumno][reporte]) data[alumno][reporte] = {};
+
+      data[alumno][reporte] = {
+        nombre: nombre,
+        fechaEntrega: fecha,
+        firmado: firmadoEstado,
+        evidencia: evidenciaNombre,
+        fechaActualizacion: hoy.toLocaleDateString(),
+        horaActualizacion: hoy.toLocaleTimeString()
+      };
+
+      localStorage.setItem('reportes', JSON.stringify(data));
+
+      fechaActualizacion.textContent = hoy.toLocaleDateString();
+      horaActualizacion.textContent = hoy.toLocaleTimeString();
+      alert('Reporte guardado correctamente.');
+    }
+  </script>
+</body>
+</html>

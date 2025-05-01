@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Reportes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #A0F2CC, #B6F2D6, #26BF69);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+    }
+
+    .main-container {
+      display: flex;
+      width: 100%;
+      max-width: 1300px;
+      gap: 60px;
+    }
+
+    .sidebar {
+      width: 320px;
+      background-color: #ffffff;
+      padding: 25px;
+      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+      border-radius: 16px;
+    }
+
+    .sidebar h1 {
+      color: #026B5A;
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar label {
+      margin-top: 20px;
+      color: #333;
+      display: block;
+    }
+
+    .sidebar select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #A0F2CC;
+      margin-top: 10px;
+      font-size: 14px;
+      background-color: #F2F2F2;
+      transition: 0.3s;
+    }
+
+    .sidebar select:hover {
+      border-color: #26BF69;
+    }
+
+    .report-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background-color: #26BF69;
+      margin-top: 12px;
+      border-left: 5px solid #025908;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      color: white;
+    }
+
+    .report-item:hover {
+      background-color: #025908;
+      transform: scale(1.03);
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #introduccion {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    #introduccion h2 {
+      color: #025908;
+      margin-bottom: 10px;
+    }
+
+    #editor {
+      display: none;
+      background-color: #ffffff;
+      border-radius: 16px;
+      padding: 30px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      border: 2px solid #26BF69;
+      margin-top: 30px;
+    }
+
+    #editor h2 {
+      color: #025908;
+      margin-bottom: 15px;
+    }
+
+    #fecha {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #A0F2CC;
+      background-color: #F2F2F2;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    #fecha:focus {
+      border-color: #26BF69;
+      background-color: #ffffff;
+    }
+
+    .button {
+      display: inline-block;
+      width: auto;
+      padding: 12px 24px;
+      background-color: #26BF69;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 14px;
+      text-align: center;
+      margin: 10px 5px 0;
+    }
+
+    .button:hover {
+      background-color: #025908;
+    }
+
+    #regresar {
+      background-color: #E8F5E9;
+      border: 1px solid #A0F2CC;
+      color: #026B5A;
+      font-weight: bold;
+    }
+
+    #regresar:hover {
+      background-color: #026B5A;
+      color: white;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    /* ESTILOS RESPONSIVE */
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .sidebar {
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .content {
+        width: 100%;
+        max-width: 500px;
+        align-items: center;
+      }
+
+      #introduccion,
+      #editor {
+        margin-top: 20px;
+      }
+
+      .report-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .btn-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 20px;
+      }
+
+      .sidebar h1,
+      #introduccion h2,
+      #editor h2 {
+        font-size: 20px;
+      }
+
+      .sidebar label,
+      .sidebar select,
+      #fecha {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="sidebar">
+      <h1>Reportes</h1>
+      <label for="filtro">Filtrar:</label>
+      <select id="filtro" onchange="filtrarReportes()">
+        <option value="todos">Todos</option>
+        <option value="1">Reporte 1</option>
+        <option value="2">Reporte 2</option>
+        <option value="3">Reporte 3</option>
+        <option value="4">Reporte 4</option>
+        <option value="5">Reporte 5</option>
+      </select>
+      <div id="lista-reportes" style="margin-top: 30px;">
+        <div class="report-item" data-id="1" onclick="seleccionarReporte(this)">
+          <span>Reporte 1</span>
+          <span class="fecha">00/00/00</span>
+        </div>
+        <div class="report-item" data-id="2" onclick="seleccionarReporte(this)">
+          <span>Reporte 2</span>
+          <span class="fecha">00/00/00</span>
+        </div>
+        <div class="report-item" data-id="3" onclick="seleccionarReporte(this)">
+          <span>Reporte 3</span>
+          <span class="fecha">00/00/00</span>
+        </div>
+        <div class="report-item" data-id="4" onclick="seleccionarReporte(this)">
+          <span>Reporte 4</span>
+          <span class="fecha">00/00/00</span>
+        </div>
+        <div class="report-item" data-id="5" onclick="seleccionarReporte(this)">
+          <span>Reporte 5</span>
+          <span class="fecha">00/00/00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="introduccion">
+        <h2>Bienvenido</h2>
+        <p>Selecciona un reporte desde el menú izquierdo para editar la fecha de entrega.</p>
+        <button class="button" id="regresar" onclick="window.history.back()">Regresar</button>
+      </div>
+
+      <div id="editor">
+        <h2>Editar Reporte</h2>
+        <label for="fecha">Fecha de entrega:</label>
+        <input type="date" id="fecha" />
+        <div class="btn-container">
+          <button class="button" onclick="cambiarFecha()">Cambiar</button>
+          <button class="button" id="regresar" onclick="regresar()">Regresar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let elementoSeleccionado = null;
+
+    function seleccionarReporte(elemento) {
+      elementoSeleccionado = elemento;
+      document.getElementById('editor').style.display = 'block';
+      document.getElementById('fecha').value = '';
+      document.getElementById('introduccion').style.display = 'none';
+    }
+
+    function cambiarFecha() {
+      const nuevaFecha = document.getElementById('fecha').value;
+      if (elementoSeleccionado && nuevaFecha) {
+        elementoSeleccionado.querySelector('.fecha').innerText = nuevaFecha;
+      }
+    }
+
+    function regresar() {
+      document.getElementById('editor').style.display = 'none';
+      document.getElementById('introduccion').style.display = 'block';
+    }
+
+    function filtrarReportes() {
+      const filtro = document.getElementById('filtro').value;
+      const reportes = document.querySelectorAll('.report-item');
+      reportes.forEach((reporte) => {
+        if (filtro === 'todos' || reporte.getAttribute('data-id') === filtro) {
+          reporte.style.display = 'flex';
+        } else {
+          reporte.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
