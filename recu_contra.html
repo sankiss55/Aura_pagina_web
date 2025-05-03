@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recuperar Contraseña | CECYTEM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="css/recu_contra.css">
+    <script src="./js/recu_contra.js" defer></script>
+</head>
+
+<body>
+    <div class="main">
+        <div class="recovery-box">
+            <h2>¿Olvidaste tu contraseña?</h2>
+            <form id="recovery-form">
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="correo" placeholder="Correo electrónico" required />
+                </div>
+                <button class="btn-recover" type="submit">Enviar código</button>
+                <div class="back-login">
+                    <a href="index.html">Volver al login</a>
+                </div>
+            </form>
+
+            <div class="codigo-box" id="codigo-box"></div>
+        </div>
+    </div>
+
+    <div class="codigo-modal" id="codigo-modal">
+        <div class="modal-content">
+            <h3>Ingresa el código</h3>
+            <input type="text" id="codigo" placeholder="Código" required />
+            <button id="btn-verify">Verificar Código</button>
+        </div>
+    </div>
+
+    <div class="codigo-modal" id="password-modal">
+        <div class="modal-content">
+            <h3>Nueva Contraseña</h3>
+            <div class="div_password">
+                <input type="password" id="new-password" placeholder="Nueva contraseña" required />
+                <i class="fas fa-eye-slash toggle-password" onclick="togglePassword('new-password', this)"></i>
+            </div>
+           <div class="div_password">
+            <input type="password" id="confirm-password" placeholder="Confirmar contraseña" required />
+            <i class="fas fa-eye-slash toggle-password" onclick="togglePassword('confirm-password', this)"></i>
+           </div>
+            <button id="btn-update-password">Actualizar Contraseña</button>
+        </div>
+    </div>
+
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+    </div>
+
+
+    <div class="custom-alert" id="customAlert">
+        <div class="alert-content">
+            <div class="alert-icon">
+                <i class="fas fa-check-circle success-icon"></i>
+                <i class="fas fa-times-circle error-icon"></i>
+            </div>
+            <div class="alert-text"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>
